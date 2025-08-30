@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import css from "./NoteForm.module.css";
 
 interface NoteFormProps {
-  onClose?: () => void;
+  onClose: () => void;
 }
 
 const NoteSchema = Yup.object({
@@ -26,11 +26,13 @@ const NoteSchema = Yup.object({
     .required("Required field"),
 });
 
-export default function NoteForm() {
+export default function NoteForm({ onClose }: NoteFormProps) {
   const fieldId = useId();
   const queryClient = useQueryClient();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // zustand
   const { draft, setDraft, clearDraft } = useNoteDraftStore();
 
   const handleChange = (
@@ -57,6 +59,7 @@ export default function NoteForm() {
       router.push(`/notes/filter/${tagToRedirect}`);
     },
   });
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // debugger;
     event.preventDefault();
@@ -102,6 +105,7 @@ export default function NoteForm() {
           />
           {errors.title && <span className={css.error}>{errors.title}</span>}
         </div>
+
         <div className={css.formGroup}>
           <label htmlFor={`${fieldId}-content`}>Content</label>
           <textarea
@@ -134,6 +138,7 @@ export default function NoteForm() {
           </select>
           {errors.tag && <span className={css.error}>{errors.tag}</span>}
         </div>
+
         <div className={css.actions}>
           <button
             type="button"
