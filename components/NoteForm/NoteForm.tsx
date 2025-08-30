@@ -31,8 +31,6 @@ export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
 
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // zustand
   const { draft, setDraft, clearDraft } = useNoteDraftStore();
 
   const handleChange = (
@@ -55,13 +53,11 @@ export default function NoteForm({ onClose }: NoteFormProps) {
         queryKey: ["notes"],
       });
       clearDraft();
-      const tagToRedirect = draft.tag || "All";
-      router.push(`/notes/filter/${tagToRedirect}`);
+      onClose();
     },
   });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    // debugger;
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const note: NewNoteData = {
@@ -87,7 +83,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
   };
 
   const handleCancel = () => {
-    router.back();
+    onClose();
   };
 
   return (
